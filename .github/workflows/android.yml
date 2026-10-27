@@ -59,7 +59,11 @@ jobs:
             find "$SDK_ROOT" -maxdepth 4 -type f -name sdkmanager -print || true
             exit 1
           fi
+          # sdkmanager closes stdin after accepting all licenses; with GitHub's
+          # default pipefail, the resulting 'yes' SIGPIPE falsely fails the step.
+          set +o pipefail
           yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses
+          set -o pipefail
           "$SDKMANAGER" --sdk_root="$SDK_ROOT" "ndk;29.0.13113456"
 
       - name: Apply ZORO branding
