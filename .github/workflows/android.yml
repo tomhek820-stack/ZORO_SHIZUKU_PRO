@@ -35,9 +35,14 @@ jobs:
         env:
           UPSTREAM_REF: ${{ inputs.upstream_ref || 'master' }}
         run: |
-          git clone --recurse-submodules https://github.com/RikkaApps/Shizuku.git upstream
+          # Upstream submodule URLs may use SSH; CI has no SSH deploy key.
+          # Rewrite GitHub SSH URLs to HTTPS before cloning submodules.
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git config --global --add url."https://github.com/".insteadOf "ssh://git@github.com/"
+          git clone https://github.com/RikkaApps/Shizuku.git upstream
           cd upstream
           git checkout "$UPSTREAM_REF"
+          git submodule sync --recursive
           git submodule update --init --recursive
           echo "UPSTREAM_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
 
