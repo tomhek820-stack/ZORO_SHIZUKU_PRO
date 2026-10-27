@@ -47,9 +47,20 @@ jobs:
           echo "UPSTREAM_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
 
       - name: Accept Android SDK licenses and install NDK
+        shell: bash
         run: |
-          yes | sdkmanager --licenses
-          sdkmanager "ndk;29.0.13113456"
+          SDK_ROOT="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          SDKMANAGER="$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            SDKMANAGER="$(find "$SDK_ROOT" -type f -name sdkmanager -perm -u+x -print -quit)"
+          fi
+          if [ -z "$SDKMANAGER" ] || [ ! -x "$SDKMANAGER" ]; then
+            echo "::error::sdkmanager was not found under $SDK_ROOT"
+            find "$SDK_ROOT" -maxdepth 4 -type f -name sdkmanager -print || true
+            exit 1
+          fi
+          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT" "ndk;29.0.13113456"
 
       - name: Apply ZORO branding
         run: python scripts/brand_upstream.py upstream
