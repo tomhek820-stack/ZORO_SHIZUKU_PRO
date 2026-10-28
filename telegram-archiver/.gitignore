@@ -1,0 +1,6 @@
+*.session
+*.session-journal
+.env
+__pycache__/
+*.pyc
+ZORO_Telegram_Archives/
