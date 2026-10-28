@@ -16,22 +16,21 @@ Telegram chat/channel exporter for Android + Termux. The Python tool uses your o
    pkg update -y && pkg upgrade -y
    pkg install -y python git
    termux-setup-storage
-   mkdir -p ~/zoro-telegram-archiver
-   cd ~/zoro-telegram-archiver
+   git clone https://github.com/tomhek820-stack/ZORO_SHIZUKU_PRO.git
+   cd ZORO_SHIZUKU_PRO/telegram-archiver
    ```
-3. Download the Python script and requirements from this repository's `telegram-archiver/` directory, or clone the repository and `cd telegram-archiver`.
-4. Install dependencies:
+3. Install dependencies:
    ```sh
    python -m pip install --upgrade pip
    pip install -r requirements.txt
    ```
-5. Create API credentials at https://my.telegram.org/apps. Keep `api_id` and `api_hash` private.
-6. Start the exporter:
+4. Create API credentials at https://my.telegram.org/apps. Keep `api_id` and `api_hash` private.
+5. Start the exporter:
    ```sh
    python zoro_telegram_archiver.py
    ```
-7. Enter API ID, API hash, and your phone number when prompted. Enter the Telegram login code (and 2FA password if enabled) in Termux.
-8. ZIP files are written to `~/storage/shared/ZORO_Telegram_Archives/` when shared storage is available; otherwise to `~/ZORO_Telegram_Archives/`.
+6. Enter API ID, API hash, and your phone number when prompted. Enter the Telegram login code (and 2FA password if enabled) in Termux.
+7. ZIP files are written to `~/storage/shared/ZORO_Telegram_Archives/` when shared storage is available; otherwise to `~/ZORO_Telegram_Archives/`.
 
 ## Export options
 - Choose a dialog from your accessible private chats, groups, or channels.
@@ -40,7 +39,7 @@ Telegram chat/channel exporter for Android + Termux. The Python tool uses your o
 - Output ZIP contains `messages.json`, `index.html`, `media/`, and `manifest.json`.
 
 ## Android APK
-The companion APK can be built from `android/` with Android Gradle Plugin and Java 17, or by the GitHub Actions workflow in `.github/workflows/telegram-archiver-android.yml`. It explains setup and opens Termux if installed. The Python exporter remains the engine for this version.
+The companion APK can be built from `telegram-archiver/android/` with Android Gradle Plugin and Java 17. The GitHub Actions workflow is at `.github/workflows/telegram-archiver-android.yml`. It explains setup, copies the run command, and opens Termux if installed. The Python exporter remains the engine for this version.
 
 ## Troubleshooting
 - `API_ID_INVALID`: verify credentials from `my.telegram.org/apps`.
